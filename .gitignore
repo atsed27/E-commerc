@@ -1,0 +1,6 @@
+
+myenv/
+client/node_modules/
+server/db.sqlite3/
+server/.env
+
