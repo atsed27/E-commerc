@@ -11,19 +11,12 @@ from .models import User
 class signUP(views.APIView):
     def post(self,request):
         body = userSerializer(data=request.data)
-        
         body.is_valid(raise_exception=True)
-        
         # encrypt user password
         password = request.data['password']
         hashPassword = bcrypt.hashpw(password.encode('utf-8'),bcrypt.gensalt());
-        
-        
-        
         body.validated_data['password']=hashPassword.decode('utf-8')
         body.save()
-        
-        
         return Response(body.data)
 class signIn(views.APIView):
     def post(self,request):
@@ -34,9 +27,7 @@ class signIn(views.APIView):
            return Response({"message":"User is not found","status":status.HTTP_404_NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
         
         #Compare the provided password with the hashed password
-        
         checkPassword = bcrypt.checkpw(password.encode('utf-8'), findUser.password.encode('utf-8'))
-        
         if not checkPassword:
             return Response(
                 {"message": "Password is incorrect", "status": "409", "error": "True"},
@@ -44,7 +35,6 @@ class signIn(views.APIView):
             )
             
         #create token
-        
         payload = {
             'id': str(findUser.id),  # Convert UUID to string
             'isAdmin':bool(findUser.is_superuser),

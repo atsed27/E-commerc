@@ -3,15 +3,36 @@ import { Link } from 'react-router-dom';
 import { Footer, Navbar } from '../components';
 import axios from 'axios';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
-  const {
+  const navigate = useNavigate();
+  var {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  const submitHandler = async () => {
-    console.log('dani');
+  const submitHandler = async ({ email, password }) => {
+    try {
+      const res = await axios.post(
+        'http://127.0.0.1:8000/api/user/signin',
+        {
+          email,
+          password,
+        },
+        {
+          withCredentials: true,
+        }
+      );
+      console.log(res.data);
+      navigate('/home');
+    } catch (error) {
+      if (error.response.data.message) {
+        return alert(error.response.data.message);
+      }
+      alert('Something Error');
+      console.log(error);
+    }
   };
 
   return (
