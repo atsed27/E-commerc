@@ -2,15 +2,35 @@ import React from 'react';
 import { Footer, Navbar } from '../components';
 import { Link } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
+  const navigate = useNavigate();
   const {
     handleSubmit,
     register,
     formState: { errors },
   } = useForm();
-  const submitHandler = async () => {
-    console.log('dani');
+
+  const submitHandler = async ({ email, password, fname, lname }) => {
+    console.log(fname, lname, email);
+    let first_name = fname;
+    let last_name = lname;
+
+    try {
+      const res = await axios.post('http://127.0.0.1:8000/api/user/signup', {
+        first_name,
+        last_name,
+        email,
+        password,
+      });
+      console.log(res.data);
+      navigate('/login');
+    } catch (error) {
+      alert('Something Error');
+      console.log(error);
+    }
   };
   return (
     <>
@@ -24,18 +44,33 @@ const Register = () => {
             className="col-md-4 col-lg-4 col-sm-8 mx-auto"
           >
             <div className="form my-3">
-              <label for="Name">Full Name</label>
+              <label for="Name">First Name</label>
               <input
-                type="email"
+                type="text"
                 className="form-control"
-                id="name"
-                placeholder="Enter Your Name"
-                {...register('name', {
-                  required: 'Please enter your name',
+                id="fname"
+                placeholder="Enter Your First Name"
+                {...register('fname', {
+                  required: 'Please enter your First name',
                 })}
               />
-              {errors.name && (
-                <div className="text-danger"> {errors.name.message} </div>
+              {errors.fname && (
+                <div className="text-danger"> {errors.fname.message} </div>
+              )}
+            </div>
+            <div className="form my-3">
+              <label for="Name">Last Name</label>
+              <input
+                type="text"
+                className="form-control"
+                id="lname"
+                placeholder="Enter Your Last Name"
+                {...register('lname', {
+                  required: 'Please enter your Last name',
+                })}
+              />
+              {errors.lname && (
+                <div className="text-danger"> {errors.lname.message} </div>
               )}
             </div>
             <div className="form my-3">
