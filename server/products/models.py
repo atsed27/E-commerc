@@ -12,6 +12,7 @@ class Product(models.Model):
     category=models.CharField(max_length=255,blank=False)
     total=models.IntegerField(blank=False)
     stack=models.IntegerField(blank=False)
+    price=models.IntegerField(blank=False)
     image = models.ImageField(upload_to='images/')
     created_at = models.DateTimeField(default=timezone.now)
     updated_at = models.DateTimeField(auto_now=True)
